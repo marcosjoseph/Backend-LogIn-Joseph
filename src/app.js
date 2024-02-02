@@ -73,8 +73,8 @@ app.use(session({
 app.use("/api/products", productsRouter); //le pongo api para poder manejar el crud
 app.use("/api/carts", cartRouter);
 app.use("/", viewsRouter) //aca renderizo las vistas de los handlebars
-app.use("api/login", loginRouter);
-app.use("api/signup", signupRouter);
+app.use("/api/login", loginRouter);
+app.use("/api/signup", signupRouter);
 
 //Conecto el cookie-parser
 app.use(cookieParser(COOKIESECRET));
