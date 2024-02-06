@@ -1,5 +1,5 @@
 import express from "express";
-import {Server} from "socket.io";
+// import {Server} from "socket.io";
 import handlebars from "express-handlebars";
 import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
@@ -11,9 +11,11 @@ import dotenv from "dotenv";
 import productsRouter from "./routes/products.router.js";
 import cartRouter from "./routes/cart.router.js";
 import viewsRouter from "./routes/views.router.js";
+import sessionRouter from "./routes/session.router.js";
+import signupRouter from "./routes/signup.router.js";
 import loginRouter from "./routes/login.router.js";
-import signupRouter from "./routes/signUp.router.js";
-// import sessionRouter from "./routes/session.router.js";
+
+
 
 import {__dirname} from "./utils.js";
 
@@ -59,7 +61,7 @@ app.set("view engine", "handlebars"); //
 app.use(session({
     store: MongoStore.create({
         mongoUrl: DB_URL,
-        ttl:30, // El tiempo en el que expirará la session
+        ttl:600, // El tiempo en el que expirará la session
         mongoOptions: {
             useNewUrlParser:true,
         }
@@ -73,41 +75,43 @@ app.use(session({
 app.use("/api/products", productsRouter); //le pongo api para poder manejar el crud
 app.use("/api/carts", cartRouter);
 app.use("/", viewsRouter) //aca renderizo las vistas de los handlebars
-app.use("/api/login", loginRouter);
+app.use("/api/", sessionRouter)
 app.use("/api/signup", signupRouter);
+app.use("/api/login", loginRouter);
+
 
 //Conecto el cookie-parser
 app.use(cookieParser(COOKIESECRET));
 
 
 //Configuro el socket
-const socketServer = new Server(server);
+// const socketServer = new Server(server);
 
-socketServer.on ("connection", (socket) => {
-    console.log("Nuevo Cliente Conectado");
+// socketServer.on ("connection", (socket) => {
+//     console.log("Nuevo Cliente Conectado");
     
-    socket.on("addProduct", async (product)=>{
-        const nombre= product.nombre;
-        const descripcion = product.descripcion;
-        const img = product.img;
-        const precio = product.precio;
-        const stock = product.stock;
-        const code = product.code;
+//     socket.on("addProduct", async (product)=>{
+//         const nombre= product.nombre;
+//         const descripcion = product.descripcion;
+//         const img = product.img;
+//         const precio = product.precio;
+//         const stock = product.stock;
+//         const code = product.code;
 
-        try {
-            const agregarProducto = await productManager.addProduct(nombre, descripcion, img, precio, stock, code);
-            const allProducts = await productManager.getProducts();
+//         try {
+//             const agregarProducto = await productManager.addProduct(nombre, descripcion, img, precio, stock, code);
+//             const allProducts = await productManager.getProducts();
 
-            agregarProducto && socketServer.emit("updateProducts", allProducts)
-        } catch (error) {console.log("Error al agregar Producto," + error)};
-        })
+//             agregarProducto && socketServer.emit("updateProducts", allProducts)
+//         } catch (error) {console.log("Error al agregar Producto," + error)};
+//         })
 
-    socket.on("deleteProduct", async (id) => {
-        try {
-            const borrarProducto = await productManager.deleteProductById(id);
-            const allProducts = await productManager.getProducts();
+//     socket.on("deleteProduct", async (id) => {
+//         try {
+//             const borrarProducto = await productManager.deleteProductById(id);
+//             const allProducts = await productManager.getProducts();
 
-            borrarProducto && socketServer.emit("updateProducts", allProducts)
-    } catch (error) {console.log("Error al eliminar el producto," + error)}})
-})
+//             borrarProducto && socketServer.emit("updateProducts", allProducts)
+//     } catch (error) {console.log("Error al eliminar el producto," + error)}})
+// })
 

@@ -4,12 +4,22 @@ import {auth} from "../middlewares/index.js";
 
 const router = Router();
 
-router.get("/", (req,res) => {
-    res.render("session", {
-    })
+router.post("/login", async (req,res) => {
+    const {email, password} = req.body;
+    const result = await UserModel.findOne({email, password});
+
+    if(result === null) {
+        res.status(400).json({error:"Usuario o contraseña incorrectos"})
+    } else {
+        req.session.user = email;
+        req.session.role = result.role || "user";
+        res.status(200).json({
+            respuesta:"Ok"
+        })
+    }
 });
 
-router.post("singup", async (req, res) => {
+router.post("/signup", async (req, res) => {
     const {first_name, last_name, email, password, age} = req.body;
 
     const newUser = {first_name, last_name, email, password, age, role:"user",}
@@ -30,5 +40,12 @@ router.post("singup", async (req, res) => {
         })
     }
 })
+
+router.get("/privado", auth, (req, res) => {
+    res.render("topsecret", {
+        title: "Privado",
+        user: req.session.user
+    })
+} )
 
 export default router;
