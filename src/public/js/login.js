@@ -3,7 +3,7 @@
 async function postLogin (email, password) {
     const data = {email, password};
 
-    const response = await fetch ("/login", {
+    const response = await fetch ("/api/login", {
         method:"POST",
         headers: {"Content-Type":"application/json",},
         body: JSON.stringify(data),
@@ -12,7 +12,7 @@ async function postLogin (email, password) {
     const result = await response.json();
 
     if (result.respuesta === "Ok") {
-        window.location.href = "/privado";
+        window.location.href = "/api/products";
     } else { alert("Datos Incorrectos")}
 }
 

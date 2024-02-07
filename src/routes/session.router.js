@@ -4,9 +4,9 @@ import {auth} from "../middlewares/index.js";
 
 const router = Router();
 
-router.post("/login", async (req,res) => {
+router.post("/api/login", async (req,res) => {
     const {email, password} = req.body;
-    const result = await UserModel.findOne({email, password});
+    const result = await UserModel.findOne({email, password}); //por seguridad, la password no deberia estar aca. habria que cryptarla.
 
     if(result === null) {
         res.status(400).json({error:"Usuario o contraseña incorrectos"})
@@ -19,7 +19,7 @@ router.post("/login", async (req,res) => {
     }
 });
 
-router.post("/signup", async (req, res) => {
+router.post("/api/signup", async (req, res) => {
     const {first_name, last_name, email, password, age} = req.body;
 
     const newUser = {first_name, last_name, email, password, age, role:"user",}
@@ -44,7 +44,8 @@ router.post("/signup", async (req, res) => {
 router.get("/privado", auth, (req, res) => {
     res.render("topsecret", {
         title: "Privado",
-        user: req.session.user
+        user: req.session.user,
+        style:"/css/styles.css",
     })
 } )
 

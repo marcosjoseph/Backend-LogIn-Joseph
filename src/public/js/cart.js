@@ -9,25 +9,27 @@ console.log(cartId);
 async function minus(pid) {
     console.log("productID:", pid);
 
-    const URL = `/carts/${cartId}/product/${pid}`;
+    const URL = `/api/carts/${cartId}/product/${pid}`;
     console.log(URL);
 
     const response = await fetch(`${URL}`, {
     method: "DELETE",
     });
     const data = await response.json();
+    console.log(data);
     window.location.reload();
 }
 
 async function plus(pid) {
     console.log("productID:", pid);
 
-    const URL = `/carts/${cartId}/product/${pid}`;
+    const URL = `/api/carts/${cartId}/product/${pid}`;
     console.log(URL);
 
-    const response = await fetch(URL, {
+    const response = await fetch(`${URL}`, {
     method: "PUT",
     });
     const data = await response.json();
+    console.log(data)
     window.location.reload();
 }

@@ -3,7 +3,7 @@
 async function postSignup (first_name,last_name,email, password,age) {
     const data = {first_name, last_name,email,password,age};
 
-    const response = await fetch("/signup", {
+    const response = await fetch("/api/signup", {
         method:"POST",
         headers: {"Content-Type":"application/json",},
         body: JSON.stringify(data),
@@ -27,6 +27,6 @@ signupForm.addEventListener("submit", async (event) => {
     const result = await postSignup(first_name,last_name,email, password,age);
 
     if (result.respuesta === "Usuario creado con exito") {
-        window.location.href = "/login";
+        window.location.href = "/api/login";
     } else {alert("Datos Incorrectos")}
 })

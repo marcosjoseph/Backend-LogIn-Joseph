@@ -28,7 +28,7 @@ router.get("/", async (req, res) => {
 
     const products = docs;
 
-    res.render("products", {products,hasPrevPage,hasNextPage,prevPage,nextPage})
+    res.render("products", {products,hasPrevPage,hasNextPage,prevPage,nextPage, style:"/css/products.css"})
 })
 
 router.get("/:id", async (req, res) => {

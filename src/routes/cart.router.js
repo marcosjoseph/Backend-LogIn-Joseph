@@ -56,7 +56,8 @@ router.put("/:cid/product/:pid", async (req, res) => {
             message:"Cart o Producto o encontrado"
         })}
 
-        (item) => item.product.equals(pid)
+    const productIndex = isCartValid.products.findIndex(
+        (productData) => productData.product._id == pid);
 
     if(productIndex === -1) {
         isCartValid.products.push(newProduct);
@@ -96,7 +97,7 @@ router.delete("/:cid/product/:pid", async (req, res) => {
         })}
 
     const productIndex = isCartValid.products.findIndex(
-        (product) => product.product.equals(pid))
+        (productData) => productData.product._id == pid);
 
     if(productIndex === -1) {
             res.status(400).json({
